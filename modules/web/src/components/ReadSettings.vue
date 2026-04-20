@@ -166,6 +166,23 @@
             >开启</span
           >
         </li>
+        <li class="read-mode">
+          <i>阅读模式</i>
+          <span
+            class="read-mode-item"
+            :key="0"
+            :class="{ selected: readMode === 'default' }"
+            @click="setReadMode('default')"
+            >初始模式</span
+          >
+          <span
+            class="read-mode-item"
+            :key="1"
+            :class="{ selected: readMode === 'mobile' }"
+            @click="setReadMode('mobile')"
+            >手机模式</span
+          >
+        </li>
       </ul>
     </div>
   </div>
@@ -177,8 +194,16 @@ import '../assets/fonts/iconfont.css'
 import settings from '../config/themeConfig'
 import API from '@api'
 import { useDebounceFn } from '@vueuse/shared'
+import type { ReadMode } from '@/web'
+import { useReadModeStore } from '@/store/readModeStore'
 
 const store = useBookStore()
+const readModeStore = useReadModeStore()
+
+const readMode = computed(() => readModeStore.readMode)
+const setReadMode = (mode: ReadMode) => {
+  readModeStore.setReadMode(mode)
+}
 const saveConfigDebounce = useDebounceFn(
   () => API.saveReadConfig(store.config),
   500,
@@ -435,11 +460,13 @@ const setInfiniteLoading = (loading: boolean) => {
       }
 
       .font-list,
-      .infinite-loading {
+      .infinite-loading,
+      .read-mode {
         margin-top: 28px;
 
         .font-item,
-        .infinite-loading-item {
+        .infinite-loading-item,
+        .read-mode-item {
           width: 78px;
           height: 34px;
           cursor: pointer;
@@ -465,7 +492,8 @@ const setInfiniteLoading = (loading: boolean) => {
         }
 
         .font-item:hover,
-        .infinite-loading-item:hover {
+        .infinite-loading-item:hover,
+        .read-mode-item:hover {
           border: 1px solid #ed4259;
           color: #ed4259;
         }
@@ -535,9 +563,11 @@ const setInfiniteLoading = (loading: boolean) => {
   }
 
   :deep(.font-list),
-  .infinite-loading {
+  .infinite-loading,
+  .read-mode {
     .font-item,
-    .infinite-loading-item {
+    .infinite-loading-item,
+    .read-mode-item {
       border: 1px solid #666;
       background: rgba(45, 45, 45, 0.5);
     }
@@ -568,9 +598,11 @@ const setInfiniteLoading = (loading: boolean) => {
   }
 
   :deep(.font-list),
-  .infinite-loading {
+  .infinite-loading,
+  .read-mode {
     .font-item,
-    .infinite-loading-item {
+    .infinite-loading-item,
+    .read-mode-item {
       background: rgba(255, 255, 255, 0.5);
       border: 1px solid rgba(0, 0, 0, 0.1);
     }

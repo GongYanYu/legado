@@ -9,7 +9,7 @@ export const bookRoutes = [
   {
     path: '/chapter',
     name: 'chapter',
-    component: () => import('../views/BookChapter.vue'),
+    component: () => import('../views/BookChapter/index.vue'),
   },
 ]
 

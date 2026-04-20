@@ -1,3 +1,5 @@
+export type ReadMode = 'default' | 'mobile'
+
 export type webReadConfig = {
   theme: number
   font: number
