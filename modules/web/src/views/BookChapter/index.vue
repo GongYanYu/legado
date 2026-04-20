@@ -423,11 +423,36 @@ const handleMobileClick = (event: MouseEvent) => {
   const x = event.clientX - rect.left
   const width = rect.width
 
+  const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+  const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight
+  const clientHeight = document.documentElement.clientHeight || window.innerHeight
+  const isAtTop = scrollTop === 0
+  const isAtBottom = scrollTop + clientHeight >= scrollHeight - 10
+
   if (x < width * 0.25) {
-    toPreChapter()
+    // 左边：如果在顶部，切换上一章；否则上一页（向上滚动一屏）
+    if (isAtTop) {
+      toPreChapter()
+    } else {
+      canJump = false
+      jump(0 - clientHeight + 100, {
+        duration: readModeStore.scrollSpeed,
+        callback: () => (canJump = true),
+      })
+    }
   } else if (x > width * 0.75) {
-    toNextChapter()
+    // 右边：如果在底部，切换下一章；否则下一页（向下滚动一屏）
+    if (isAtBottom) {
+      toNextChapter()
+    } else {
+      canJump = false
+      jump(clientHeight - 100, {
+        duration: readModeStore.scrollSpeed,
+        callback: () => (canJump = true),
+      })
+    }
   } else {
+    // 中间：显示/隐藏工具栏
     showToolBar.value = !showToolBar.value
   }
 }

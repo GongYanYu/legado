@@ -183,6 +183,20 @@
             >手机模式</span
           >
         </li>
+        <li class="scroll-speed">
+          <i>滚动速度</i>
+          <div class="slider-container">
+            <span class="speed-label">{{ scrollSpeed }}ms</span>
+            <el-slider
+              v-model="scrollSpeed"
+              :min="0"
+              :max="2000"
+              :step="100"
+              :show-tooltip="false"
+              @change="onScrollSpeedChange"
+            />
+          </div>
+        </li>
       </ul>
     </div>
   </div>
@@ -203,6 +217,17 @@ const readModeStore = useReadModeStore()
 const readMode = computed(() => readModeStore.readMode)
 const setReadMode = (mode: ReadMode) => {
   readModeStore.setReadMode(mode)
+}
+const scrollSpeed = computed({
+  get: () => readModeStore.scrollSpeed,
+  set: (val: number | number[]) => {
+    const speed = Array.isArray(val) ? val[0] : val
+    readModeStore.setScrollSpeed(speed)
+  },
+})
+const onScrollSpeedChange = (val: number | number[]) => {
+  const speed = Array.isArray(val) ? val[0] : val
+  readModeStore.setScrollSpeed(speed)
 }
 const saveConfigDebounce = useDebounceFn(
   () => API.saveReadConfig(store.config),
@@ -503,7 +528,8 @@ const setInfiniteLoading = (loading: boolean) => {
       .read-width,
       .letter-spacing,
       .line-spacing,
-      .paragraph-spacing {
+      .paragraph-spacing,
+      .scroll-speed {
         margin-top: 28px;
 
         .resize {
@@ -544,6 +570,28 @@ const setInfiniteLoading = (loading: boolean) => {
             vertical-align: middle;
           }
         }
+
+        .slider-container {
+          display: inline-block;
+          width: 274px;
+          vertical-align: middle;
+
+          .speed-label {
+            display: inline-block;
+            width: 60px;
+            text-align: center;
+            vertical-align: middle;
+            color: #a6a6a6;
+            font-family: FZZCYSK;
+          }
+
+          :deep(.el-slider) {
+            display: inline-block;
+            width: 200px;
+            vertical-align: middle;
+            margin-left: 10px;
+          }
+        }
       }
     }
   }
@@ -570,6 +618,23 @@ const setInfiniteLoading = (loading: boolean) => {
     .read-mode-item {
       border: 1px solid #666;
       background: rgba(45, 45, 45, 0.5);
+    }
+  }
+
+  :deep(.scroll-speed) {
+    .slider-container {
+      .speed-label {
+        color: #666;
+      }
+    }
+    :deep(.el-slider__runway) {
+      background-color: #555;
+    }
+    :deep(.el-slider__bar) {
+      background-color: #ed4259;
+    }
+    :deep(.el-slider__button) {
+      border-color: #ed4259;
     }
   }
 
@@ -605,6 +670,23 @@ const setInfiniteLoading = (loading: boolean) => {
     .read-mode-item {
       background: rgba(255, 255, 255, 0.5);
       border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  :deep(.scroll-speed) {
+    .slider-container {
+      .speed-label {
+        color: #a6a6a6;
+      }
+    }
+    :deep(.el-slider__runway) {
+      background-color: #e4e7ed;
+    }
+    :deep(.el-slider__bar) {
+      background-color: #ed4259;
+    }
+    :deep(.el-slider__button) {
+      border-color: #ed4259;
     }
   }
 
