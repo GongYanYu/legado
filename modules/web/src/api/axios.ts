@@ -4,11 +4,13 @@ import axios from 'axios'
 export const baseURL_localStorage_key = 'remoteUrl'
 const SECOND = 1000
 
+const getBaseURL = () => {
+  const viteApi = import.meta.env.VITE_API
+  return viteApi || localStorage.getItem(baseURL_localStorage_key) || location.origin
+}
+
 const ajax = axios.create({
-  baseURL:
-    import.meta.env.VITE_API ||
-    localStorage.getItem(baseURL_localStorage_key) ||
-    location.origin,
+  baseURL: getBaseURL(),
   timeout: 120 * SECOND,
 })
 
